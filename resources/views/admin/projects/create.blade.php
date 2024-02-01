@@ -1,46 +1,62 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mt-5">
-    @include('partials.back')
-    
-    <h2 class="text-center">Aggiungi un nuovo progetto</h2>
+    <div class="container mt-5">
+        @include('partials.back')
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        <h2 class="text-center">Aggiungi un nuovo progetto</h2>
 
-    <form class="mt-5" action="{{ route('admin.projects.store') }}" method="POST">
-        @csrf
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <div class="mb-3">
-            <label for="title" class="form-label">Titolo</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
-        </div>
+        <form class="mt-5" action="{{ route('admin.projects.store') }}" method="POST">
+            @csrf
 
-        <div class="mb-3">
-            <label for="type_id"></label>
-            <select class="form-select" aria-label="Default select example" id="type_id" name="type_id">
-                <option>Seleziona una categoria</option>
-                <option value="1">Front-end</option>
-                <option value="2">Back-end</option>
-                <option value="3">Fullstack</option>
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label for="description" class="form-label">Descrizione</label>
-            <textarea class="form-control" id="description" rows="3" name="description">{{ old('description') }}</textarea>
-        </div>      
-        
-        <button class="btn btn-success" type="submit">Salva</button>
+            <div class="mb-3">
+                <label for="title" class="form-label">Titolo</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+            </div>
 
-    </form>
-</div>
+            <div class="mb-3">
+                <label for="type_id">Categoria</label>
+                <select class="form-select" aria-label="Default select example" id="type_id" name="type_id">
+                    <option>Seleziona una categoria</option>
+                    <option value="1">Front-end</option>
+                    <option value="2">Back-end</option>
+                    <option value="3">Fullstack</option>
+                </select>
+            </div>
+
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea class="form-control" id="description" rows="3" name="description">{{ old('description') }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <p>Seleziona la/le tecnologie impiegate:</p>
+                <div class="form-check">
+                    @foreach ($technologies as $technology)
+                        <div>
+                            <input type="checkbox" id="technology-{{ $technology->id }}" value="{{ $technology->id }}"
+                                name="technologies[]">
+                            <label for="technology-{{ $technology->id }}">
+                                {{ $technology->name }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <button class="btn btn-success" type="submit">Salva</button>
+            
+        </form>
+    </div>
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -29,7 +30,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('technologies'));
     }
 
     /**
@@ -46,6 +48,10 @@ class ProjectController extends Controller
         $project->fill($form_data);
 
         $project->save();
+
+        if($request->has('technologies')) {
+            $project->technologies()->attach($request->technologies);
+        }
 
         return redirect()->route('admin.projects.show', ["project" => $project->slug])->with('add_message', 'Elemento creato correttamente');
     }
