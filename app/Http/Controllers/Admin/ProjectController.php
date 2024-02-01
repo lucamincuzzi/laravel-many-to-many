@@ -75,7 +75,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'technologies'));
     }
 
     /**
@@ -91,6 +92,12 @@ class ProjectController extends Controller
 
         $project_to_update = $project;
         $project_to_update->update($form_data);
+
+        if($request->has('technologies')) {
+            $project_to_update->technologies()->sync($request->technologies);
+        } else {
+            $project_to_update->technologies()->sync([]);
+        }
 
         return redirect()->route('admin.projects.show', ["project" => $project_to_update->slug])->with('edit_message', 'Le modifiche sono state apportate con successo');
     }

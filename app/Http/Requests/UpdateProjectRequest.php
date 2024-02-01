@@ -25,8 +25,9 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', Rule::unique("posts")->ignore($this->post), 'min:5', 'max:100'],
+            'title' => ['required', Rule::unique("projects")->ignore($this->project), 'min:5', 'max:100'],
             'description' => 'nullable|max:300',
+            'tags' => ['exists:tag,id'],
         ];
     }
 
